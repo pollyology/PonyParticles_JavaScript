@@ -158,7 +158,7 @@ class TranslationMatrix extends Matrix
 		{
 			for (let j = 0; j < nCols; j++)
 			{
-				this.set(i, j) += (i == 0) ? xShift : yShift;	// harcode x and y to row 0 and 1 
+				this.set(i, j) += (i === 0) ? xShift : yShift;	// harcode x and y to row 0 and 1 
 			}
 		}
 	}
