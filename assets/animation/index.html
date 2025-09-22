@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Particles</title>
+	<style>
+		body 
+		{
+			margin: 0;
+			overflow: hidden;
+			background: #000;
+		}
+		canvas
+		{
+			display: block;
+			margin: auto;
+			background: #222;
+		}
+	</style>
+</head>
+<body>
+  <canvas id="gameWindow"></canvas>
+  <script type="module">
+    import Engine from "./Engine.js";
+    const engine = new Engine("gameWindow");
+    engine.start();
+  </script>
+</body>
+</html>
