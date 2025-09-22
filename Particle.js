@@ -1,5 +1,6 @@
 // Import Matrix class as a module
-import { mapPixelToCoords  } from "./utils";
+import { mapPixelToCoords } from "./utils";
+
 // Constants
 const M_PI = 3.1415926535897932384626433
 const G = 1000;
@@ -44,15 +45,40 @@ class Particle
     // Methods
     draw()
     {
+        const ctx = this.ctx;
+        const { m_centerCoordinate, m_A, numPoints, canvas } = this;
 
+        ctx.beginPath();
+
+        // Center canvas and context
+        const center = mapPixelToCoords(m_centerCoordinate.x, m_centerCoordinate.y, canvas);
+        ctx.moveTo(center.x, center.y)
+
+        for (let j = 1; j <= numPoints; j++)
+        {
+            let x = m_A.get(0, j - 1);
+            let y = m_A.get(1, j - 1);
+
+            let mapped = mapPixelToCoords(x, y, canvas);
+            ctx.lineTo(mapped.x, mapped.y);
+        }
+        ctx.closePath();
+
+        // Set colors
+        ctx.fillStyle = this.m_color1;
+        ctx.strokeStyle = this.m_color2;
+        ctx.lineWidth = 1;
+
+        ctx.fill();
+        ctx.stroke();
     }
 
     update(dt)
     {  
-        const { m_ttl, m_initialTTL, m_radiansPerSec, rotate, scale, translate, m_vx, m_vy } = this;
+        const { m_initialTTL, m_radiansPerSec, m_vx, m_vy } = this;
 
         // Create a lifetime ratio ranging from 0 to 1, using m_ttl and m_initialTTL
-        const ratio = Math.max(0, (m_ttl / m_initialTTL));
+        const ratio = Math.max(0, (this.m_ttl / m_initialTTL));
         
         // Calculate a new alpha based on the ratio, this creates a fading effect by gradually decreasing the Particle's opacity
         const alpha = (Math.floor(255 * ratio)) / 255;
@@ -62,17 +88,17 @@ class Particle
         this.m_color2 = `rgba(255, 255, 0, ${alpha})`;    // outline color
 
         // Update TTL based on DT
-        m_ttl -= dt;
+        this.m_ttl -= dt;
 
         // Update rotation, scaling, translation on Particle every frame
-        rotate(dt * m_radiansPerSec);
-        scale(SCALE);
+        this.rotate(dt * m_radiansPerSec);
+        this.scale(SCALE);
 
         let dx = m_vx * dt;
         m_vy -= G * dt;
         dy = m_vy * dt;
 
-        translate(dx, dy);
+        this.translate(dx, dy);
     }
 
     generateShape() // This method generates the positions required to draw a star-like Particle.
