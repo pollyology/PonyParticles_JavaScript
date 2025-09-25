@@ -1,65 +1,75 @@
 // This handles the game loop
 
-import { WINDOW_WIDTH, WINDOW_HEIGHT, MAX_DELTA_TIME } from "./config.js";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, TARGET_FPS, MAX_DELTA_TIME } from "./config.js";
+import { Particle } from "./Particle.js";
 
 export default class Engine 
 {
-  constructor(canvasId = "gameWindow") 
-  {
-    this.canvas = document.getElementById(canvasId);
-    this.ctx = this.canvas.getContext("2d");
+	constructor(canvasId = "gameWindow")
+	{
+		// Initialize canvas variables
+		this.canvas = document.getElementById(canvasId);
+		this.ctx = this.canvas.getContext("2d");
+		this.canvas.width = WINDOW_WIDTH;
+		this.canvas.height = WINDOW_HEIGHT;
 
-    // size the canvas
-    this.canvas.width = WINDOW_WIDTH;
-    this.canvas.height = WINDOW_HEIGHT;
+		// Shift origin to center of canvas
+    	this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
 
-    // timing
-    this.lastTime = performance.now();
-    this.accum = 0;
+		// Particles and input handling
+		this.particles = []		// array of particles
+		this.input();
+	}
 
-    // state placeholders (particles, characters, etc.)
-    this.isRunning = false;
+	input()
+	{
+		this.canvas.addEventListener("click", (e) =>
+		{
+			let min = 8;	// If min < 8, program will sometimes create triangle particles
+			let max = 20;
+			let numPoints = Math.floor(Math.random() * (max - min + 1)) + min; // randomize number of points per particle
+			
+			if (numPoints % 2 == 0) { numPoints++; }	// ensures numPoints is an odd number
+			
+			// Creates particle
+			const position = { x: e.offsetX, y: e.offsetY };
+			const p = new Particle(this.canvas, numPoints, position);
+			this.particles.push(p);
 
-    // basic input (we’ll hook this up to spawn particles later)
-    this.canvas.addEventListener("click", (e) => {
-      // placeholder for now
-      console.log("click @", e.offsetX, e.offsetY);
-    });
-  }
+			// Debug statements
+			console.log("Number of points:", numPoints);
+			console.log("Mouse click at:", position);
+			console.log("Particle created at:", p.m_centerCoordinate);
+			console.log("Particles after click:", this.particles.length);
+			
+		});
+	}
 
-  start()
-  {
-    if (this.isRunning) return;
-    this.isRunning = true;
-    this.lastTime = performance.now();
-    requestAnimationFrame(this.loop.bind(this));
-  }
+	run()
+	{
+		const loop = (now) =>
+		{
+			this.update(1 / TARGET_FPS);
+			this.draw();
+			requestAnimationFrame(loop);
+		};
+		requestAnimationFrame(loop);
+	}
 
-  loop(now) 
-  {
-    if (!this.isRunning) return;
+	update(dt)
+	{
+		this.particles.forEach((p) => p.update(dt));
+		this.particles = this.particles.filter((p) => p.m_ttl > 0);
+	}
 
-    let dt = (now - this.lastTime) / 1000;
-    this.lastTime = now;
-    if (dt > MAX_DELTA_TIME) dt = MAX_DELTA_TIME; // clamp like your C++ engine
+	draw()
+	{
+    	this.ctx.setTransform(1, 0, 0, 1, 0, 0);  // reset transform
+    	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.update(dt);
-    this.draw();
+    	// reapply transform
+    	this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
 
-    requestAnimationFrame(this.loop.bind(this));
-  }
-
-  update(dt) 
-  {
-    // soon: update particles, animation, music, buttons
-  }
-
-  draw()
-  {
-    // clear background (neutral gray for now)
-    this.ctx.fillStyle = "#222";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // soon: draw character frames, particles, UI
-  }
+    	this.particles.forEach((p) => p.draw());
+	}
 }

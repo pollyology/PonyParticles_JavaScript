@@ -5,7 +5,7 @@ class Matrix
 		this.rows = rows;
 		this.cols = cols;
 
-		this.a = new Array(rows)	// creates an array and resizes it's length to rows
+		this.a = new Array(rows);	// creates an array and resizes it's length to rows
 		for (let i = 0; i < rows; i++)
 		{
 			this.a[i] = new Array(cols).fill(0);	//	resizes array with num of columns and fills with 0
@@ -115,7 +115,7 @@ class Matrix
 }
 
 //	+===================================+
-//	|		MATRIX SUBCLASSES			|	
+//	|		MATRIX CONSTRUCTORS			|	
 //	+===================================+
 
 ///	2D rotation matrix
@@ -141,8 +141,8 @@ class ScalingMatrix extends Matrix
 		super(2, 2);	// call parent constructor to make 2x2 matrix
 
 		// Hardcode scalar values in 2x2 matrix
-		this.set(0, 0) = scale;	
-		this.set(1, 1,) = scale;
+		this.set(0, 0, scale);	
+		this.set(1, 1, scale);
 	}
 }
 
@@ -152,14 +152,16 @@ class TranslationMatrix extends Matrix
 {
 	constructor(xShift, yShift, nCols)
 	{
-		super(2, nCols)	// call parent constructor to make a 2xn matrix
+		super(2, nCols);	// call parent constructor to make a 2xn matrix
 
 		for (let i = 0; i < 2; i++)
 		{
 			for (let j = 0; j < nCols; j++)
 			{
-				this.set(i, j) += (i === 0) ? xShift : yShift;	// harcode x and y to row 0 and 1 
+				this.set(i, j, (i === 0) ? xShift : yShift);	// harcode x and y to row 0 and 1 
 			}
 		}
 	}
 }
+
+export { Matrix, RotationMatrix, ScalingMatrix, TranslationMatrix };

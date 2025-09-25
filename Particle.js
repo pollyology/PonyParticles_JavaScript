@@ -1,5 +1,4 @@
-// Import Matrix class as a module
-import { mapPixelToCoords } from "./utils";
+import { Matrix, RotationMatrix, ScalingMatrix, TranslationMatrix } from "./Matrices.js";
 
 // Constants
 const M_PI = 3.1415926535897932384626433
@@ -7,7 +6,7 @@ const G = 1000;
 const TTL = 5.0;
 const SCALE = 0.999 
 
-class Particle
+export class Particle
 {
     constructor(canvas, numPoints, mouseClickPosition)
     {
@@ -21,15 +20,20 @@ class Particle
         
         // Create random values
         this.random = Math.random() // generates a floating point number between 0 and 1
-        this.m_radiansPerSec = this.random / M_PI;
+        this.m_radiansPerSec = this.random * M_PI;	// basically affects how much particle spins by randomizing rotation angle
 
-        // Starting position of Particle based on mouse click location
-        this.m_centerCoordinate = mapPixelToCoords(mouseClickPosition.x, mouseClickPosition.y, canvas);    // to do
+        // Initialize the center coordinate based on mouse click location and canvas size
+       this.m_centerCoordinate = 
+	   { 
+    		x: mouseClickPosition.x - canvas.width / 2,
+    		y:mouseClickPosition.y - canvas.height / 2
+	   };
 
         // Initialize velocity in X & Y directions
         this.m_vx = Math.random() * 400 + 100; // Random velocity between 100 and 500
         this.m_vy = Math.random() * 400 + 100; // Random velocity between 100 and 500
-        this.m_vx = (Math.random() % 2 === 0) ? this.m_vx : -this.m_vx; // Randomizes m_vx to be positive or negative
+        this.m_vx *= Math.random() < 0.5 ? 1 : -1; // Randomizes m_vx to be positive or negative
+		this.m_vy *= Math.random() < 0.5 ? 1 : -1;
     
         // Initialize color scheme
         this.m_color1 = 'rgba(252, 193, 26, 1)';    // fill color
@@ -46,23 +50,17 @@ class Particle
     draw()
     {
         const ctx = this.ctx;
-        const { m_centerCoordinate, m_A, numPoints, canvas } = this;
+        const { m_A, numPoints } = this;
 
+		// Draw shape
         ctx.beginPath();
+		ctx.moveTo(m_A.get(0, 0), m_A.get(1, 0));	// start at first vertex
 
-        // Center canvas and context
-        const center = mapPixelToCoords(m_centerCoordinate.x, m_centerCoordinate.y, canvas);
-        ctx.moveTo(center.x, center.y)
-
-        for (let j = 1; j <= numPoints; j++)
+        for (let j = 1; j < numPoints; j++)		// draw lines for each vertex (numPoints)
         {
-            let x = m_A.get(0, j - 1);
-            let y = m_A.get(1, j - 1);
-
-            let mapped = mapPixelToCoords(x, y, canvas);
-            ctx.lineTo(mapped.x, mapped.y);
+            ctx.lineTo(m_A.get(0, j), m_A.get(1, j));
         }
-        ctx.closePath();
+        ctx.closePath();	// connect first and last vertex together
 
         // Set colors
         ctx.fillStyle = this.m_color1;
@@ -75,7 +73,7 @@ class Particle
 
     update(dt)
     {  
-        const { m_initialTTL, m_radiansPerSec, m_vx, m_vy } = this;
+        const { m_initialTTL, m_radiansPerSec } = this; 
 
         // Create a lifetime ratio ranging from 0 to 1, using m_ttl and m_initialTTL
         const ratio = Math.max(0, (this.m_ttl / m_initialTTL));
@@ -94,9 +92,9 @@ class Particle
         this.rotate(dt * m_radiansPerSec);
         this.scale(SCALE);
 
-        let dx = m_vx * dt;
-        m_vy -= G * dt;
-        dy = m_vy * dt;
+        let dx = this.m_vx * dt;
+        this.m_vy += G * dt;
+        let dy = this.m_vy * dt;
 
         this.translate(dx, dy);
     }
@@ -129,54 +127,34 @@ class Particle
 
     rotate(theta)   // This method rotates the Particle counter-clockwise by theta radians using a RotationMatrix and matrix multiplication.
     {
-        const { m_A, m_centerCoordinate, translate } = this;     // alias
-
-        let temp = { x: m_centerCoordinate.x, y: m_centerCoordinate.y };
-        translate(-m_centerCoordinate.x, -m_centerCoordinate.y);
+        let temp = { x: this.m_centerCoordinate.x, y: this.m_centerCoordinate.y };
+        this.translate(-this.m_centerCoordinate.x, -this.m_centerCoordinate.y);
         let rotation = new RotationMatrix(theta);
 
-        m_A.multiply(rotation);     // ex: m_A = R * m_A
-        translate(temp.x, temp.y);
+        this.m_A = rotation.multiply(this.m_A);     // ex: m_A = R * m_A
+        this.translate(temp.x, temp.y);
     }
 
     scale(c)    // This method scales the Particle size by a factor of 'c' by using a ScalingMatrix and matrix multiplication.
     {
-        const { m_A, m_centerCoordinate, translate } = this;     // alias
-        
-        let temp = { x: m_centerCoordinate.x, y: m_centerCoordinate.y };
-        translate(-m_centerCoordinate.x, -m_centerCoordinate.y);
+        let temp = { x: this.m_centerCoordinate.x, y: this.m_centerCoordinate.y };
+        this.translate(-this.m_centerCoordinate.x, -this.m_centerCoordinate.y);
         let scalar = new ScalingMatrix(c);
 
-        m_A.multiply(scalar);   // ex: m_A = S * m_A
-        translate(temp.x, temp.y);
+        this.m_A = scalar.multiply(this.m_A);   // ex: m_A = S * m_A
+        this.translate(temp.x, temp.y);
     }
 
     translate(xShift, yShift)   // This method shifts the Particle by coordinates (xShift, yShift) using a TranslationMatrix and matrix addition.
     {
-        const { m_A, m_centerCoordinate } = this;     // alias
-        let nCols = m_A.getCols();
+        let nCols = this.m_A.getCols();
         let translation = new TranslationMatrix(xShift, yShift, nCols);
         
-        m_A.add(translation);   // ex: m_A = T + m_A
-        m_centerCoordinate.x += xShift;
-        m_centerCoordinate.y += yShift;
+        this.m_A = this.m_A.add(translation);   // ex: m_A = T + m_A
+        this.m_centerCoordinate.x += xShift;
+        this.m_centerCoordinate.y += yShift;
 
     }
 }
 
-// Member variables
-/*
-this.m_ttl
-this.m_initialTTL
-this.m_numPoints
-this.m_centerCoordinate (Vector of 2 floats)
-m_radiansPerSec
-m_vx
-m_vy
-m_cartesianPlane    (View object)
-Color m_color1
-Color m_color2
-Matrix m_A
-m_lines (VertexArray object)
-*/
 
