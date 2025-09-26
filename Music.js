@@ -29,7 +29,7 @@ const tracks =
 	}
 }
 
-const playlist = Object.keys(track);
+const playlist = Object.keys(tracks);
 let musicIndex = 0;	// Index of the tracklist
 
 let timer = 0;
