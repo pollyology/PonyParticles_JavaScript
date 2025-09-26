@@ -7,7 +7,7 @@ music.volume = 0.25;
 //	|	MUSIC INITIALIZATION	|
 //	+---------------------------+
 
-const playlist =
+const tracks =
 {
 	TRACK_1:
 	{
@@ -29,7 +29,7 @@ const playlist =
 	}
 }
 
-const playlistMap = Object.keys(playlist);
+const playlist = Object.keys(track);
 let musicIndex = 0;	// Index of the tracklist
 
 let timer = 0;
@@ -47,9 +47,9 @@ function changeMusic()
 	timer = now;
 
 	// Change current track
-	musicIndex = (musicIndex + 1) % playlistMap.length;
-	const key = playlistMap[musicIndex]; 
-  	const track = playlist[key];              
+	musicIndex = (musicIndex + 1) % playlist.length;
+	const key = playlist[musicIndex]; 
+  	const track = tracks[key];              
   	music.src = `./assets/music/${track.file}`;
   	music.play();
 }
