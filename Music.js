@@ -17,7 +17,7 @@ const tracks =
 	},
 	TRACK_2:
 	{
-		title: "My Little Pony Theme Song",
+		title: "Make A Wish",
 		artist: "Pinkie Pie",
 		file: "Make_A_Wish_Extended.flac"
 	},
@@ -52,6 +52,8 @@ function changeMusic()
   	const track = tracks[key];              
   	music.src = `./assets/music/${track.file}`;
   	music.play();
+
+	console.log(`Current track: ${track.title}`);
 }
 
 document.getElementById("changeMusicButton").addEventListener("click", () => // Switches music track when change music button is clicked.
@@ -82,6 +84,7 @@ function muteSound()
 		music.volume = 0.0;
 		isMuted = true;
 	}
+	console.log((isMuted) ? "Volume is muted." : "Volume is unmuted.");
 }
 
 document.getElementById("muteVolumeButton").addEventListener("click", muteSound);

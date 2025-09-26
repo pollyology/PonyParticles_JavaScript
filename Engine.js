@@ -71,28 +71,9 @@ export default class Engine
 
 		if (this.mouseLeftPressed) 
 		{
-			let min = 8;	// If min < 8, program will sometimes create triangle particles
-			let max = 20;
-			let numParticles = Math.floor(Math.random() * (6 - 3 + 1)) + 3;		// creates 3-6 particles on click
+			this.generateParticle(3, 6, position);		// creates 3-6 particles on click
 			
-			if (this.mousePreviouslyClicked) numParticles = Math.floor(Math.random() * (3 - 1 + 1)) + 1;	// creates 1 -3 particles when holding click
-
-			for (let i = 0; i < numParticles; i++)
-			{
-				let numPoints = Math.floor(Math.random() * (max - min + 1)) + min; // randomize number of points per particle
-				if (numPoints % 2 == 0) { numPoints++; }	// ensures numPoints is an odd number
-				
-				// Creates particle
-				const p = new Particle(this.canvas, numPoints, position);
-				//p.m_ttl = 3.00;		// update to shorter TTL
-				this.particles.push(p);
-
-				// Debug statements
-				// console.log("Number of points:", numPoints);
-				// console.log("Mouse click at:", position);
-				// console.log("Particle created at:", p.m_centerCoordinate);
-				// console.log("Particles after click:", this.particles.length);
-			}
+			if (this.mousePreviouslyClicked) this.generateParticle(1, 3, position);	// creates 1 -3 particles when holding click
 		}	
 
 		// Leave this at end to track mouse clicks
@@ -132,4 +113,46 @@ export default class Engine
 
     	this.particles.forEach((p) => p.draw());
 	}
+
+	generateParticle(min, max, position)
+	{
+		// Randomize min to max number of particles spawned
+		let numParticles = Math.floor(Math.random() * (max - min + 1)) + min;
+
+		for (let i = 0; i < numParticles; i++)
+		{
+			// Randomize a star with min to max number of vertices
+			let minPoints = 8;	// If min < 8, program will sometimes create triangle particles
+			let maxPoints = 20;
+
+			let numPoints = Math.floor(Math.random() * (maxPoints - minPoints + 1)) + minPoints; // randomize number of points per particle
+			if (numPoints % 2 == 0) { numPoints++; }	// ensures numPoints is an odd number
+			
+			// Creates particle
+			const p = new Particle(this.canvas, numPoints, position);
+			//p.m_ttl = 3.00;		// update to shorter TTL
+			this.particles.push(p);
+
+			// Debug statements
+			// console.log("Number of points:", numPoints);
+			// console.log("Mouse click at:", position);
+			// console.log("Particle created at:", p.m_centerCoordinate);
+			// console.log("Particles after click:", this.particles.length);
+		}
+	}
 }
+
+function specialEvent()
+{
+	// create a box offscreen for particles to spawn from
+	// create a random position within the spawn box
+	generateParticle(8, 13, position)	// generate 8-13 particles on click
+	// change the velocity and ttl of each particles before/after pushing to array
+	// const p = new Particle(this.canvas, numPoints, position)
+	// p.m_ttl = some value
+	// p.m_vx = some value
+	// p.m_vy = some value
+}
+
+document.getElementById("specialButton").addEventListener("click", specialEvent); // Switches character when change character button is clicked.
+document.getElementById("specialButton").addEventListener("touchstart", specialEvent); // Switches character when change character button is tapped.
