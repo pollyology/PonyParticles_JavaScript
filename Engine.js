@@ -71,9 +71,9 @@ export default class Engine
 
 		if (this.mouseLeftPressed) 
 		{
-			this.generateParticle(3, 6, position);		// creates 3-6 particles on click
+			this.particles.push(...this.generateParticle(3, 6, position));		// creates 3-6 particles on click, pushes into this.particles using spread operator
 			
-			if (this.mousePreviouslyClicked) this.generateParticle(1, 3, position);	// creates 1 -3 particles when holding click
+			if (this.mousePreviouslyClicked) this.particles.push(...this.generateParticle(1, 3, position));	// creates 1 -3 particles when holding click, pushes into this.particles using spread operator
 		}	
 
 		// Leave this at end to track mouse clicks
@@ -98,7 +98,7 @@ export default class Engine
 
 	update(dt)
 	{
-
+		this.despawn();
 		this.particles.forEach((p) => p.update(dt));
 		this.particles = this.particles.filter((p) => p.m_ttl > 0);
 	}
@@ -118,6 +118,7 @@ export default class Engine
 	{
 		// Randomize min to max number of particles spawned
 		let numParticles = Math.floor(Math.random() * (max - min + 1)) + min;
+		const particles = [];	// separate array from this.particles
 
 		for (let i = 0; i < numParticles; i++)
 		{
@@ -131,7 +132,7 @@ export default class Engine
 			// Creates particle
 			const p = new Particle(this.canvas, numPoints, position);
 			//p.m_ttl = 3.00;		// update to shorter TTL
-			this.particles.push(p);
+			particles.push(p);
 
 			// Debug statements
 			// console.log("Number of points:", numPoints);
@@ -139,20 +140,57 @@ export default class Engine
 			// console.log("Particle created at:", p.m_centerCoordinate);
 			// console.log("Particles after click:", this.particles.length);
 		}
+		return particles;
+	}
+	specialEvent()
+	{
+		// create a box offscreen for particles to spawn from
+		const offscreen = document.getElementById("offscreen");
+		const rect = offscreen.getBoundingClientRect();
+
+		// generate 9-21 particles on click
+		let minParticles = 9;
+		let maxParticles = 21;
+		let numParticles = Math.floor(Math.random() * (maxParticles - minParticles + 1)) + minParticles;
+		const particles = [];
+
+		for (let i = 0; i < numParticles; i++)
+		{
+			// create a random position within the spawn box
+			let position =
+			{
+				x: rect.left + Math.random() * rect.width,
+				y: rect.top + Math.random() * rect.height
+			};	
+			particles.push(...this.generateParticle(1, 1, position));
+		}	
+
+		for (let p of particles)
+		{
+			// change the velocity and ttl of each particles before/after pushing to array
+			p.m_ttl = Math.random() * (6 - 3 + 1) + 3;	// between 3 and 6
+			p.m_vx = 1.0;
+			p.m_vy = 5.0;
+
+			// push modified particles into this.particles
+			this.particles.push(p);
+		}
+	}
+	despawn()
+	{
+		// if particle center coordinate is found outside WINDOW_HEIGHT and WINDOW_WIDTH + buffer, delete particle from this.particles
+		const buffer = 100;
+		const boundsX = WINDOW_WIDTH + buffer;
+		const boundsY = WINDOW_HEIGHT + buffer;
+
+		for (let i = this.particles.length - 1; i >= 0; i--)
+		{
+			const p = this.particles[i];
+
+			if (Math.abs(p.m_centerCoordinate) > boundsX || Math.abs(p.m_centerCoordinate) > boundsY)
+			{
+				this.particles.splice(i, 1);
+			}
+		}
 	}
 }
-
-function specialEvent()
-{
-	// create a box offscreen for particles to spawn from
-	// create a random position within the spawn box
-	generateParticle(8, 13, position)	// generate 8-13 particles on click
-	// change the velocity and ttl of each particles before/after pushing to array
-	// const p = new Particle(this.canvas, numPoints, position)
-	// p.m_ttl = some value
-	// p.m_vx = some value
-	// p.m_vy = some value
-}
-
-document.getElementById("specialButton").addEventListener("click", specialEvent); // Switches character when change character button is clicked.
-document.getElementById("specialButton").addEventListener("touchstart", specialEvent); // Switches character when change character button is tapped.

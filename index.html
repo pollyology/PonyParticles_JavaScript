@@ -34,7 +34,7 @@
 			background-color: transparent;
 			left: 0px;
 			top: 50px;
-			width: WINDOW_WIDTH;
+			width: 1920px;
 			height: 5px;
 		}
 	</style>
@@ -48,7 +48,7 @@
 	<button id = "specialButton">Special Event</button>
 	
 	<img id = "bg" src = "assets/animation/rainbow-dash.gif">
-	
+	<div id = "offscreen"></div>
 	<canvas id="window"></canvas>
   	
 	<script type="module">
@@ -56,6 +56,10 @@
     	import Engine from "./Engine.js";
     	const engine = new Engine("window");
 		engine.run();
+		
+		document.getElementById("specialButton").addEventListener("click", () => engine.specialEvent()); // Activates special event when special button is clicked.
+		document.getElementById("specialButton").addEventListener("touchstart", () => engine.specialEvent()); // Activates special event when special button is clicked.
+
   	</script>
 
 	<script src = "./Animation.js"></script>
