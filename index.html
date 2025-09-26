@@ -8,22 +8,46 @@
 		{
 			margin: 0;
 			overflow: hidden;
-			background: #000;
+			background: rgb(154, 218, 248); /* default to Rainbow Dash Blue */
 		}
-		canvas
+		#bg
 		{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%) scale(0.5);
+			z-index: 0;	/* places bg under all other elements */
+			pointer-events: none;	/* bg does not interact with click */
+	
+		}
+		#window
+		{
+			position: relative;
+			z-index: 1;
 			display: block;
 			margin: auto;
-			background: #222;
+			background: transparent;
 		}
 	</style>
 </head>
 <body>
-  <canvas id="gameWindow"></canvas>
-  <script type="module">
-    import Engine from "./Engine.js";
-    const engine = new Engine("gameWindow");
-    engine.run();
-  </script>
+	<audio id = "music" src = "assets/music/MLP_Extended.flac" loop></audio>
+
+	<button id = "changeMusicButton">Change Music</button>
+	<button id = "changeCharacterButton">Change Character</button>
+	<button id = "muteVolumeButton">Mute Volume</button>
+	
+	<img id = "bg" src = "assets/animation/rainbow-dash.gif">
+	
+	<canvas id="window"></canvas>
+  	
+	<script type="module">
+    	import Engine from "./Engine.js";
+    	const engine = new Engine("window");
+		engine.run();
+  	</script>
+
+	<script src = "./Animation.js"></script>
+	<script src = "./Music.js"></script>
 </body>
 </html>

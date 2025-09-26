@@ -42,7 +42,7 @@ export class Particle
         // Initialize canvas to draw Particle on
         this.ctx = this.canvas.getContext('2d');
 
-        // Logic for drawing Particles
+        // Create the Particles shape
         this.generateShape();
     }
 

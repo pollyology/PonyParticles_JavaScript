@@ -16,40 +16,99 @@ export default class Engine
 		// Shift origin to center of canvas
     	this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
 
-		// Particles and input handling
-		this.particles = []		// array of particles
-		this.input();
+		// Initialize array to hold particles
+		this.particles = [];
+		
+		// Input handling
+		this.mouseLeftPressed = false;
+		this.mousePreviouslyClicked = false;
+		this.mousePos = { x: 0, y: 0 };
+
+		// Track mouse state
+		this.canvas.addEventListener("mousedown", (e) =>	// When mouse button is clicked.
+		{
+			if (e.button === 0) this.mouseLeftPressed = true;
+			this.mousePos = { x: e.offsetX, y: e.offsetY };
+		});
+		this.canvas.addEventListener("mouseup", (e) => 		// When mouse button is released.
+		{
+			if (e.button === 0) this.mouseLeftPressed = false;
+			this.mousePos = { x: e.offsetX, y: e.offsetY };
+		});
+		this.canvas.addEventListener("mousemove", (e) => 	// When mouse is moved.
+		{
+			this.mousePos = { x: e.offsetX, y: e.offsetY };
+		});
+
+		// Track touch state (for mobile devices)
+		this.canvas.addEventListener("touchstart", (e) => 	// When screen is touched.
+		{
+			e.preventDefault();		// prevents scrolling/zoom
+			const touch = e.touches[0];	// only registers first touch/finger
+			this.mouseLeftPressed = true;
+			this.mousePos = { 	x: touch.clientX - this.canvas.offsetLeft, 
+								y: touch.clientY - this.canvas.offsetTop };
+		});
+		this.canvas.addEventListener("touchend", (e) => 	// When touch is released.
+		{
+			this.mouseLeftPressed = false;
+			this.mousePos = { x: e.offsetX, y: e.offsetY };
+		});
+		this.canvas.addEventListener("touchmove", (e) => 	// When touching and moving across screen.
+		{
+			e.preventDefault();
+			const touch = e.touches[0];
+			this.mousePos = { 	x: touch.clientX - this.canvas.offsetLeft, 
+								y: touch.clientY - this.canvas.offsetTop };
+		});
+
 	}
 
-	input()
+	input(dt)
 	{
-		this.canvas.addEventListener("click", (e) =>
+		this.timeSinceLastParticle += dt;
+		let position = this.mousePos;
+
+		if (this.mouseLeftPressed) 
 		{
 			let min = 8;	// If min < 8, program will sometimes create triangle particles
 			let max = 20;
-			let numPoints = Math.floor(Math.random() * (max - min + 1)) + min; // randomize number of points per particle
+			let numParticles = Math.floor(Math.random() * (6 - 3 + 1)) + 3;		// creates 3-6 particles on click
 			
-			if (numPoints % 2 == 0) { numPoints++; }	// ensures numPoints is an odd number
-			
-			// Creates particle
-			const position = { x: e.offsetX, y: e.offsetY };
-			const p = new Particle(this.canvas, numPoints, position);
-			this.particles.push(p);
+			if (this.mousePreviouslyClicked) numParticles = Math.floor(Math.random() * (3 - 1 + 1)) + 1;	// creates 1 -3 particles when holding click
 
-			// Debug statements
-			console.log("Number of points:", numPoints);
-			console.log("Mouse click at:", position);
-			console.log("Particle created at:", p.m_centerCoordinate);
-			console.log("Particles after click:", this.particles.length);
-			
-		});
+			for (let i = 0; i < numParticles; i++)
+			{
+				let numPoints = Math.floor(Math.random() * (max - min + 1)) + min; // randomize number of points per particle
+				if (numPoints % 2 == 0) { numPoints++; }	// ensures numPoints is an odd number
+				
+				// Creates particle
+				const p = new Particle(this.canvas, numPoints, position);
+				//p.m_ttl = 3.00;		// update to shorter TTL
+				this.particles.push(p);
+
+				// Debug statements
+				// console.log("Number of points:", numPoints);
+				// console.log("Mouse click at:", position);
+				// console.log("Particle created at:", p.m_centerCoordinate);
+				// console.log("Particles after click:", this.particles.length);
+			}
+		}	
+
+		// Leave this at end to track mouse clicks
+		this.mousePreviouslyClicked = this.mouseLeftPressed;
 	}
 
 	run()
 	{
+		let lastFrameTime = performance.now();
 		const loop = (now) =>
 		{
-			this.update(1 / TARGET_FPS);
+			let dt = (now - lastFrameTime) / 1000;
+			dt = Math.min(dt, MAX_DELTA_TIME);
+			lastFrameTime = now;
+			this.input(dt);
+			this.update(dt);
 			this.draw();
 			requestAnimationFrame(loop);
 		};
@@ -58,6 +117,7 @@ export default class Engine
 
 	update(dt)
 	{
+
 		this.particles.forEach((p) => p.update(dt));
 		this.particles = this.particles.filter((p) => p.m_ttl > 0);
 	}
