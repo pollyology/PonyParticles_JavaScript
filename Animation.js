@@ -5,29 +5,37 @@
 //	+-------------------------------+
 const characters = // The list of characters
 {
-	"rainbow-dash":
+	"Rainbow Dash":
 	{
 		name: "rainbow-dash",
 		color: "rgb(154, 218, 248)",   // light blue
-		image: new Image()
+		image: new Image(),
+		scale: 0.5,
+		offset: { x: -75, y: 0}
 	},
-	"fluttershy":
+	"Fluttershy":
 	{
 		name: "fluttershy",
 		color: "rgb(253, 175, 192)",   // pink
-		image: new Image()
+		image: new Image(),
+		scale: 1.0,
+		offset: { x: -5, y: 10}
 	},
-	"pinkie-pie":
+	"Pinkie Pie":
 	{
 		name: "pinkie-pie",
 		color: "rgb(246, 171, 199)",   // bright pink
-		image: new Image()
+		image: new Image(),
+		scale: 0.55,
+		offset: { x: -20, y: 0}
 	},
-	"twilight-sparkle":
+	"Twilight Sparkle":
 	{
 		name: "twilight-sparkle",
 		color: "rgb(199, 157, 215)", // purple
-		image: new Image()
+		image: new Image(),
+		scale: 1.0,
+		offset: { x: -10, y: 15}
 	}
 };
 
@@ -47,21 +55,24 @@ let characterIndex = 0;	// Index of the character list
 //	|		CHANGE CHARACTER		|
 //	+-------------------------------+
 
-function changeCharacter()
+export function changeCharacter()
 {
 	characterIndex = (characterIndex + 1) % characterMap.length;	// Increments index by 1 and loops through array without going out-of-bounds
 	const key = characterMap[characterIndex];
 	const currentCharacter = characters[key]; // Current character we are accessing by index
 
-	// Change image source to the filename of current character
-	document.getElementById("bg").src = currentCharacter.image.src;
+	// Apply settings of the selected character to background
+	const { scale, offset } = currentCharacter;
 	document.body.style.backgroundColor = currentCharacter.color;
+	document.getElementById("bg").src = currentCharacter.image.src;
+	document.getElementById("bg").style.transform = `translate(-50%, -50%) scale(${scale}) translate(${offset.x}px, ${offset.y}px)`;
+
+	console.log(`Switched pony to ${key}!`);
+
 }
 
-document.getElementById("changeCharacterButton").addEventListener("click", changeCharacter); // Switches character when change character button is clicked.
-document.getElementById("changeCharacterButton").addEventListener("touchstart", changeCharacter); // Switches character when change character button is tapped.
-
-// To Do: 9/25
+// To Do: 9/28
 // Adjust animations to fit screen better
 // Add playlist button
 // Add special buttons
+// add logic to change image based on click ( music and volume button )

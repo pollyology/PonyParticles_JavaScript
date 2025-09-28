@@ -5,7 +5,7 @@ import { Particle } from "./Particle.js";
 
 export default class Engine 
 {
-	constructor(canvasId = "gameWindow")
+	constructor(canvasId = "window")
 	{
 		// Initialize canvas variables
 		this.canvas = document.getElementById(canvasId);
@@ -71,7 +71,7 @@ export default class Engine
 
 		if (this.mouseLeftPressed) 
 		{
-			this.particles.push(...this.generateParticle(3, 6, position));		// creates 3-6 particles on click, pushes into this.particles using spread operator
+			this.particles.push(...this.generateParticle(3, 5, position));		// creates 3-6 particles on click, pushes into this.particles using spread operator
 			
 			if (this.mousePreviouslyClicked) this.particles.push(...this.generateParticle(1, 3, position));	// creates 1 -3 particles when holding click, pushes into this.particles using spread operator
 		}	
@@ -142,6 +142,7 @@ export default class Engine
 		}
 		return particles;
 	}
+
 	specialEvent()
 	{
 		// create a box offscreen for particles to spawn from
@@ -176,6 +177,7 @@ export default class Engine
 			this.particles.push(p);
 		}
 	}
+
 	despawn()
 	{
 		// if particle center coordinate is found outside WINDOW_HEIGHT and WINDOW_WIDTH + buffer, delete particle from this.particles
@@ -189,7 +191,7 @@ export default class Engine
 
 			if (Math.abs(p.m_centerCoordinate) > boundsX || Math.abs(p.m_centerCoordinate) > boundsY)
 			{
-				this.particles.splice(i, 1);
+				this.particles.splice(i, 1);	// removes specific particle by its index
 			}
 		}
 	}

@@ -1,0 +1,77 @@
+@font-face
+{
+  font-family: "Celsius Flower";
+  src: url("./assets/fonts/Celsius Flower.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+#ui
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	pointer-events: none;
+}
+
+#ui button
+{
+	width: 80px;
+	height: 80px;
+	border: none;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: absolute;
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+#ui button:hover { transform: scale(1.1); }
+#ui button:active { transform: scale(0.95); }
+
+#specialButton
+{
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: auto;
+  height: auto;
+  font-family: "Celsius Flower", sans-serif;
+  font-size: 24px;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  padding: 10px 20px;
+}
+
+#specialButton:hover
+{
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#characterButton
+{
+	font-family: "Celsius Flower", sans-serif;
+	color: white;
+	background: transparent;
+}
+
+#musicButton
+{
+	background: transparent;
+	background-image: url("./assets/images/Music_On.png");
+	bottom: 5%; right: 15%;
+}
+
+#volumeButton
+{
+	background: transparent;
+	background-image: url("./assets/images/Volume_On.png");
+	bottom: 5%; right: 5%;
+}

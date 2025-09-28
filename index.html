@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Particles</title>
+	<link rel = "stylesheet" href = "ui.css">
 	<style>
 		body 
 		{
@@ -42,27 +43,18 @@
 <body>
 	<audio id = "music" src = "assets/music/MLP_Extended.flac" loop></audio>
 
-	<button id = "changeMusicButton">Change Music</button>
-	<button id = "changeCharacterButton">Change Character</button>
-	<button id = "muteVolumeButton">Mute Volume</button>
-	<button id = "specialButton">Special Event</button>
-	
+	<!-- UI Buttons -->
+	<div id = "ui">
+		<button id = "characterButton">change character?</button>
+		<button id = "specialButton">i love computer science!</button>
+		<button id = "musicButton"></button>
+		<button id = "volumeButton"></button>
+	</div>
+
 	<img id = "bg" src = "assets/animation/rainbow-dash.gif">
 	<div id = "offscreen"></div>
 	<canvas id="window"></canvas>
   	
-	<script type="module">
-		import { WINDOW_HEIGHT, WINDOW_WIDTH, WINDOW_TITLE } from "./config.js";
-    	import Engine from "./Engine.js";
-    	const engine = new Engine("window");
-		engine.run();
-		
-		document.getElementById("specialButton").addEventListener("click", () => engine.specialEvent()); // Activates special event when special button is clicked.
-		document.getElementById("specialButton").addEventListener("touchstart", () => engine.specialEvent()); // Activates special event when special button is clicked.
-
-  	</script>
-
-	<script src = "./Animation.js"></script>
-	<script src = "./Music.js"></script>
+	<script type="module" src = "./UI.js"></script>
 </body>
 </html>

@@ -36,10 +36,10 @@ let timer = 0;
 const cooldown = 300;	// 300ms -> 0.3 s
 		
 //	+---------------------------+
-//	|		MUSIC BUTTON		|
+//	|		CHANGE MUSIC		|
 //	+---------------------------+
 
-function changeMusic()
+export function changeMusic()
 {
 	// Check for cooldown timer
 	const now = performance.now();	
@@ -56,23 +56,13 @@ function changeMusic()
 	console.log(`Current track: ${track.title}`);
 }
 
-document.getElementById("changeMusicButton").addEventListener("click", () => // Switches music track when change music button is clicked.
-{
-	changeMusic();
-});
-
-document.getElementById("changeMusicButton").addEventListener("touchstart", () => // Switches music track when change music button is tapped.
-{
-	changeMusic();
-});
-
 //	+---------------------------+
 //	|		MUTE BUTTON			|
 //	+---------------------------+
 
 let isMuted = false;
 
-function muteSound()
+export function muteSound()
 {
 	if (isMuted)
 	{
@@ -86,6 +76,3 @@ function muteSound()
 	}
 	console.log((isMuted) ? "Volume is muted." : "Volume is unmuted.");
 }
-
-document.getElementById("muteVolumeButton").addEventListener("click", muteSound);
-document.getElementById("muteVolumeButton").addEventListener("touchstart", muteSound);
