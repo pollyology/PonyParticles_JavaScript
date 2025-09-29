@@ -9,14 +9,14 @@
 		{
 			margin: 0;
 			overflow: hidden;
-			background: rgb(154, 218, 248); /* default to Rainbow Dash Blue */
+			background: white;
 		}
 		#bg
 		{
 			position: absolute;
 			top: 50%;
 			left: 50%;
-			transform: translate(-50%, -50%) scale(0.5);
+			transform: translate(-50%, -50%) scale(0.5) translate(-75px, 0px);
 			z-index: 0;	/* places bg under all other elements */
 			pointer-events: none;	/* bg does not interact with click */
 	
@@ -41,20 +41,21 @@
 	</style>
 </head>
 <body>
-	<audio id = "music" src = "assets/music/MLP_Extended.flac" loop></audio>
-
-	<!-- UI Buttons -->
-	<div id = "ui">
-		<button id = "characterButton">change character?</button>
-		<button id = "specialButton">i love computer science!</button>
-		<button id = "musicButton"></button>
-		<button id = "volumeButton"></button>
+	<div id = "container">
+		<img id = "bg" src = "assets/animation/rainbow-dash.gif">
+		<canvas id="window"></canvas>
+	
+		<!-- UI Buttons -->
+		<div id = "ui">
+			<button id = "characterButton">change character?</button>
+			<button id = "specialButton">i love computer science!</button>
+			<button id = "musicButton"></button>
+			<button id = "volumeButton"></button>
+		</div>
 	</div>
 
-	<img id = "bg" src = "assets/animation/rainbow-dash.gif">
+	<audio id = "music" src = "assets/music/MLP_Extended.flac" loop></audio>
 	<div id = "offscreen"></div>
-	<canvas id="window"></canvas>
-  	
 	<script type="module" src = "./UI.js"></script>
 </body>
 </html>

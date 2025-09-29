@@ -63,7 +63,7 @@ export function changeCharacter()
 
 	// Apply settings of the selected character to background
 	const { scale, offset } = currentCharacter;
-	document.body.style.backgroundColor = currentCharacter.color;
+	document.getElementById("container").style.backgroundColor = currentCharacter.color;
 	document.getElementById("bg").src = currentCharacter.image.src;
 	document.getElementById("bg").style.transform = `translate(-50%, -50%) scale(${scale}) translate(${offset.x}px, ${offset.y}px)`;
 

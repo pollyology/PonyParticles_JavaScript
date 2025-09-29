@@ -6,6 +6,35 @@
   font-style: normal;
 }
 
+#container
+{
+	width: 960px;
+	height: 540px;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+	background: rgb(154, 218, 248); /* default to Rainbow Dash Blue */
+}
+
+#window 
+{
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: transparent;
+  z-index: 1;
+}
+
+#bg 
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  z-index: 0;
+  pointer-events: none;
+}
+
 #ui
 {
 	position: absolute;
@@ -19,8 +48,6 @@
 
 #ui button
 {
-	width: 80px;
-	height: 80px;
 	border: none;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -30,48 +57,70 @@
 	pointer-events: auto;
 }
 
-#ui button:hover { transform: scale(1.1); }
-#ui button:active { transform: scale(0.95); }
-
 #specialButton
 {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  
-  width: auto;
-  height: auto;
-  font-family: "Celsius Flower", sans-serif;
-  font-size: 24px;
-  color: white;
-  background: transparent;
-  border: 2px solid white;
-  padding: 10px 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -200px);
+    font-family: "Celsius Flower", sans-serif;
+    font-size: 50px;
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    padding: 10px 20px;
+    white-space: nowrap;
 }
-
-#specialButton:hover
-{
-  background: rgba(255, 255, 255, 0.2);
-}
+#specialButton:hover { color: yellow; }
 
 #characterButton
 {
-	font-family: "Celsius Flower", sans-serif;
-	color: white;
-	background: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-380px, 245px);
+    font-family: "Celsius Flower", sans-serif;
+    font-size: 22px;
+    color: white;
+    background: transparent;
+    border: none;
+    white-space: nowrap;
+    cursor: pointer;
 }
+#characterButton:hover { color: yellow; }
 
 #musicButton
 {
-	background: transparent;
-	background-image: url("./assets/images/Music_On.png");
-	bottom: 5%; right: 15%;
+    position: absolute;
+    bottom: 20px;
+    right: 100px;
+    width: 16px; 
+    height: 16px;
+    background: transparent url("./assets/images/Music_On.png") center/cover no-repeat;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+#musicButton:hover
+{
+    transform: scale(1.1);
 }
 
 #volumeButton
 {
-	background: transparent;
-	background-image: url("./assets/images/Volume_On.png");
-	bottom: 5%; right: 5%;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 16px; 
+    height: 16px;
+    background: transparent url("./assets/images/Volume_On.png") center/cover no-repeat;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+#volumeButton:hover
+{
+    transform: scale(1.1);
 }
