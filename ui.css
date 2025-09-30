@@ -62,7 +62,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -200px);
+    transform: translate(-50%, -250px);
     font-family: "Celsius Flower", sans-serif;
     font-size: 50px;
     color: white;
@@ -71,14 +71,18 @@
     padding: 10px 20px;
     white-space: nowrap;
 }
-#specialButton:hover { color: yellow; }
+#specialButton:hover 
+{ 
+  transform: translate(-50%, -250px) scale(1.1);
+  color: yellow;
+}
 
 #characterButton
 {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-380px, 245px);
+    transform: translate(-470px, 230px);
     font-family: "Celsius Flower", sans-serif;
     font-size: 22px;
     color: white;
@@ -87,15 +91,19 @@
     white-space: nowrap;
     cursor: pointer;
 }
-#characterButton:hover { color: yellow; }
+#characterButton:hover
+{ 
+  transform: translate(-470px, 230px) scale(1.1);
+  color: yellow;
+}
 
 #musicButton
 {
     position: absolute;
-    bottom: 20px;
-    right: 100px;
-    width: 16px; 
-    height: 16px;
+    bottom: 15px;
+    right: 60px;
+    width: 34px; 
+    height: 34px;
     background: transparent url("./assets/images/Music_On.png") center/cover no-repeat;
     border: none;
     cursor: pointer;
@@ -110,10 +118,10 @@
 #volumeButton
 {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 16px; 
-    height: 16px;
+    bottom: 15px;
+    right: 15px;
+    width: 34px; 
+    height: 34px;
     background: transparent url("./assets/images/Volume_On.png") center/cover no-repeat;
     border: none;
     cursor: pointer;

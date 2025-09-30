@@ -8,8 +8,11 @@
 		body 
 		{
 			margin: 0;
+			padding: 0;
 			overflow: hidden;
-			background: white;
+			background: black;
+			width: 960px;
+			height: 540px;
 		}
 		#bg
 		{
@@ -34,9 +37,15 @@
 			position: absolute;
 			background-color: transparent;
 			left: 0px;
-			top: 50px;
+			top: -50px;
 			width: 1920px;
 			height: 5px;
+		}
+		#banner
+		{
+		  position: relative;
+		  width: 100px;
+		  height: 100px;
 		}
 	</style>
 </head>
@@ -44,6 +53,7 @@
 	<div id = "container">
 		<img id = "bg" src = "assets/animation/rainbow-dash.gif">
 		<canvas id="window"></canvas>
+		<div id = "banner">Test Banner</div>
 	
 		<!-- UI Buttons -->
 		<div id = "ui">

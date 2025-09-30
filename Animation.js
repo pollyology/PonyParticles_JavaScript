@@ -45,7 +45,7 @@ const characters = // The list of characters
 
 for (const key in characters)	// loop through all characters
 {
-	characters[key].image.src = `./assets/animation/${characters[key].name}.gif`	// preload all gifs into images key
+	characters[key].image.src = `./assets/animation/${characters[key].name}.gif`;	// preload all gifs into images key
 }
 
 const characterMap = Object.keys(characters);

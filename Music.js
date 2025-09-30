@@ -1,7 +1,16 @@
 // Play the default song
 const music = document.getElementById("music");
-music.play();
 music.volume = 0.25;
+
+music.play().catch(() => 
+{
+  console.log("Autoplay blocked, waiting for user input.");
+});
+
+document.addEventListener("mousedown", () => 
+{
+  if (music.paused) music.play();
+}, { once: true });
 
 //	+---------------------------+
 //	|	MUSIC INITIALIZATION	|
@@ -53,7 +62,7 @@ export function changeMusic()
   	music.src = `./assets/music/${track.file}`;
   	music.play();
 
-	console.log(`Current track: ${track.title}`);
+	console.log(`Now playing: ${track.title} - ${track.artist}`);
 }
 
 //	+---------------------------+
@@ -64,15 +73,18 @@ let isMuted = false;
 
 export function muteSound()
 {
+  const button = document.getElementById("volumeButton");
 	if (isMuted)
 	{
 		music.volume = 0.25;
 		isMuted = false;
+		button.style.backgroundImage = 'url("./assets/images/Volume_On.png")';
 	}
 	else
 	{
 		music.volume = 0.0;
 		isMuted = true;
+		button.style.backgroundImage = 'url("./assets/images/Volume_Mute.png")';
 	}
 	console.log((isMuted) ? "Volume is muted." : "Volume is unmuted.");
 }

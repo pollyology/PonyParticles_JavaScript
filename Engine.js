@@ -12,17 +12,21 @@ export default class Engine
 		this.ctx = this.canvas.getContext("2d");
 		this.canvas.width = WINDOW_WIDTH;
 		this.canvas.height = WINDOW_HEIGHT;
+		this.canvas.style.width = "960px";
+		this.canvas.style.height = "540px";
 
 		// Shift origin to center of canvas
     	this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
 
 		// Initialize array to hold particles
 		this.particles = [];
+		this.timeSinceLastParticle = 0;
 		
 		// Input handling
 		this.mouseLeftPressed = false;
 		this.mousePreviouslyClicked = false;
 		this.mousePos = { x: 0, y: 0 };
+		this.lastMousePos = { x: 0, y: 0 };
 
 		// Track mouse state
 		this.canvas.addEventListener("mousedown", (e) =>	// When mouse button is clicked.
@@ -67,16 +71,27 @@ export default class Engine
 	input(dt)
 	{
 		this.timeSinceLastParticle += dt;
+		const cooldown = 0.05;
 		let position = this.mousePos;
-
-		if (this.mouseLeftPressed) 
+		
+    // Burst click on cooldown
+		if (this.mouseLeftPressed && !this.mousePreviouslyClicked) 
 		{
-			this.particles.push(...this.generateParticle(3, 5, position));		// creates 3-6 particles on click, pushes into this.particles using spread operator
-			
-			if (this.mousePreviouslyClicked) this.particles.push(...this.generateParticle(1, 3, position));	// creates 1 -3 particles when holding click, pushes into this.particles using spread operator
+		  this.particles.push(...this.generateParticle(5, 8, position));		// creates 3-8 particles on click, pushes into this.particles using spread operator
+			this.timeSinceLastParticle = 0;
 		}	
+		
+		// Cooldown to limit particle spawn when clicking and holding
+		if (this.mouseLeftPressed && this.mousePreviouslyClicked && this.timeSinceLastParticle >= cooldown)
+		{
+		  if (position.x !== this.lastMousePos.x || position.y !== this.lastMousePos.y) // spawns particle when mouse moves
+		  {
+		    this.particles.push(...this.generateParticle(1, 1, position));	// creates 1 -3 particles when holding click, pushes into this.particles using spread operator
+		  }
+		}
 
 		// Leave this at end to track mouse clicks
+		this.lastMousePos = { ...position };
 		this.mousePreviouslyClicked = this.mouseLeftPressed;
 	}
 
@@ -148,10 +163,11 @@ export default class Engine
 		// create a box offscreen for particles to spawn from
 		const offscreen = document.getElementById("offscreen");
 		const rect = offscreen.getBoundingClientRect();
+		offscreen.style.transform = "translateY(-200%)";
 
-		// generate 9-21 particles on click
-		let minParticles = 9;
-		let maxParticles = 21;
+		// generate 12-21 particles on click
+		let minParticles = 12;
+		let maxParticles = 32;
 		let numParticles = Math.floor(Math.random() * (maxParticles - minParticles + 1)) + minParticles;
 		const particles = [];
 
@@ -181,7 +197,7 @@ export default class Engine
 	despawn()
 	{
 		// if particle center coordinate is found outside WINDOW_HEIGHT and WINDOW_WIDTH + buffer, delete particle from this.particles
-		const buffer = 100;
+		const buffer = 500;
 		const boundsX = WINDOW_WIDTH + buffer;
 		const boundsY = WINDOW_HEIGHT + buffer;
 

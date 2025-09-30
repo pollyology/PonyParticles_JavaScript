@@ -3,7 +3,7 @@ import { Matrix, RotationMatrix, ScalingMatrix, TranslationMatrix } from "./Matr
 // Constants
 const M_PI = 3.1415926535897932384626433
 const G = 1000;
-const TTL = 5.0;
+const TTL = 3.0;
 const SCALE = 0.999 
 
 export class Particle
