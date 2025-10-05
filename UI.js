@@ -18,6 +18,22 @@ document.addEventListener("keyup", (e) => { if (e.code === "Space") spacePressed
 document.getElementById("musicButton").addEventListener("click", changeMusic); // Switches music track when change music button is clicked.
 document.getElementById("musicButton").addEventListener("touchstart", changeMusic); // Switches music track when change music button is tapped.
 
+let keyPressed = false;
+document.addEventListener("keydown", (e) => // Switches music track forwards/backwards when left/right arrow key is pressed.
+{ 
+	if (e.code === "ArrowLeft" && !keyPressed)
+	{ 
+		keyPressed = true; 
+		changeMusic(false); 
+	}
+	else if (e.code === "ArrowRight" && !keyPressed)
+	{ 
+		keyPressed = true; 
+		changeMusic(); 
+	}
+});
+document.addEventListener("keyup", (e) => { if (e.code === "ArrowLeft" || e.code === "ArrowRight" ) keyPressed = false; }); // Toggle to prevent auditory cognitohazard levels of spam.
+
 // Mute Volume Button
 document.getElementById("volumeButton").addEventListener("click", muteSound);
 document.getElementById("volumeButton").addEventListener("touchstart", muteSound);

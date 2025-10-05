@@ -68,11 +68,40 @@ export function changeCharacter()
 	document.getElementById("bg").style.transform = `translate(-50%, -50%) scale(${scale}) translate(${offset.x}px, ${offset.y}px)`;
 
 	console.log(`Switched pony to ${key}!`);
-
+	//updateSprite(); // Update cutie mark sprite to match current character
 }
 
-// To Do: 9/28
-// Adjust animations to fit screen better
-// Add playlist button
-// Add special buttons
-// add logic to change image based on click ( music and volume button )
+//	+-------------------------------+
+//	|		UPDATE SPRITE			|
+//	+-------------------------------+
+// This is for updating the cutie mark sprite when switching between ponies.
+/*
+const sprite = document.getElementById("sprite");	// 894 x 894 spritesheet divided into 2 x 3 sprites
+const cols = 3;
+const rows = 2;
+
+const width = sprite.clientWidth;
+const height = sprite.clientHeight;
+sprite.style.backgroundSize = `${cols * width}px ${rows * height}px`;
+
+const frames =
+[
+	{ col: 2, row: 1 }, // frame 6: Rainbow Dash
+	{ col: 0, row: 1 }, // frame 4: Fluttershy
+	{ col: 1, row: 0 }, // frame 2: Pinkie Pie
+	{ col: 0, row: 0 }  // frame 1: Twilight Sparkle
+];
+
+let currentFrame = 0;
+
+function updateSprite()
+{
+	const { col, row } = frames[currentFrame];	// Get row and column of current cutie mark
+	sprite.style.backgroundPosition = `-${col * width}px -${row * height}px`; // Shift the spritesheet position using cols, rows and width, height
+	
+	currentFrame = (currentFrame + 1) % frames.length;	// Loop through frames
+}
+
+updateSprite(); // show first frame
+
+*/

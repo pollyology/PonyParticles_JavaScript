@@ -12,6 +12,11 @@ document.addEventListener("mousedown", () =>
   if (music.paused) music.play();
 }, { once: true });
 
+document.addEventListener("touchstart", () => 
+{
+  if (music.paused) music.play();
+}, { once: true });
+
 //	+---------------------------+
 //	|	MUSIC INITIALIZATION	|
 //	+---------------------------+
@@ -48,15 +53,17 @@ const cooldown = 300;	// 300ms -> 0.3 s
 //	|		CHANGE MUSIC		|
 //	+---------------------------+
 
-export function changeMusic()
+export function changeMusic(forward = true)
 {
 	// Check for cooldown timer
 	const now = performance.now();	
 	if (now - timer < cooldown) return;	// this prevents a single click or double click from skipping songs twice
 	timer = now;
 
+	// Loop forwards or backwards the tracklist
+	musicIndex = (forward) ? (musicIndex + 1) % playlist.length : (musicIndex - 1 + playlist.length) % playlist.length;
+
 	// Change current track
-	musicIndex = (musicIndex + 1) % playlist.length;
 	const key = playlist[musicIndex]; 
   	const track = tracks[key];              
   	music.src = `./assets/music/${track.file}`;

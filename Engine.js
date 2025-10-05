@@ -7,13 +7,18 @@ export default class Engine
 {
 	constructor(canvasId = "window")
 	{
+	  	// Adjust the container CSS
+	  	const container = document.getElementById("container");
+    	container.style.width  = WINDOW_WIDTH + "px";
+    	container.style.height = WINDOW_HEIGHT + "px";
+  
 		// Initialize canvas variables
 		this.canvas = document.getElementById(canvasId);
 		this.ctx = this.canvas.getContext("2d");
 		this.canvas.width = WINDOW_WIDTH;
 		this.canvas.height = WINDOW_HEIGHT;
-		this.canvas.style.width = "960px";
-		this.canvas.style.height = "540px";
+		this.canvas.style.width = WINDOW_WIDTH;
+		this.canvas.style.height = WINDOW_HEIGHT;
 
 		// Shift origin to center of canvas
     	this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
@@ -68,33 +73,6 @@ export default class Engine
 
 	}
 
-	input(dt)
-	{
-		this.timeSinceLastParticle += dt;
-		const cooldown = 0.05;
-		let position = this.mousePos;
-		
-    // Burst click on cooldown
-		if (this.mouseLeftPressed && !this.mousePreviouslyClicked) 
-		{
-		  this.particles.push(...this.generateParticle(5, 8, position));		// creates 3-8 particles on click, pushes into this.particles using spread operator
-			this.timeSinceLastParticle = 0;
-		}	
-		
-		// Cooldown to limit particle spawn when clicking and holding
-		if (this.mouseLeftPressed && this.mousePreviouslyClicked && this.timeSinceLastParticle >= cooldown)
-		{
-		  if (position.x !== this.lastMousePos.x || position.y !== this.lastMousePos.y) // spawns particle when mouse moves
-		  {
-		    this.particles.push(...this.generateParticle(1, 1, position));	// creates 1 -3 particles when holding click, pushes into this.particles using spread operator
-		  }
-		}
-
-		// Leave this at end to track mouse clicks
-		this.lastMousePos = { ...position };
-		this.mousePreviouslyClicked = this.mouseLeftPressed;
-	}
-
 	run()
 	{
 		let lastFrameTime = performance.now();
@@ -109,6 +87,16 @@ export default class Engine
 			requestAnimationFrame(loop);
 		};
 		requestAnimationFrame(loop);
+	}
+	
+	input(dt)
+	{
+		this.timeSinceLastParticle += dt; // Tracks the time since last particle was spawned
+		this.onClick(); // Handles creating particles on click
+
+		// Leave this at end to track mouse clicks
+		this.lastMousePos = { ...this.mousePos };
+		this.mousePreviouslyClicked = this.mouseLeftPressed;
 	}
 
 	update(dt)
@@ -127,6 +115,24 @@ export default class Engine
     	this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
 
     	this.particles.forEach((p) => p.draw());
+	}
+	
+	despawn()
+	{
+		// if particle center coordinate is found outside WINDOW_HEIGHT and WINDOW_WIDTH + buffer, delete particle from this.particles
+		const buffer = 500;
+		const boundsX = WINDOW_WIDTH + buffer;
+		const boundsY = WINDOW_HEIGHT + buffer;
+
+		for (let i = this.particles.length - 1; i >= 0; i--)
+		{
+			const p = this.particles[i];
+
+			if (Math.abs(p.m_centerCoordinate) > boundsX || Math.abs(p.m_centerCoordinate) > boundsY)
+			{
+				this.particles.splice(i, 1);	// removes specific particle by its index
+			}
+		}
 	}
 
 	generateParticle(min, max, position)
@@ -156,6 +162,28 @@ export default class Engine
 			// console.log("Particles after click:", this.particles.length);
 		}
 		return particles;
+	}
+	
+	onClick()
+	{
+	  const cooldown = 0.05;
+	  
+	  // Burst click on cooldown
+		if (this.mouseLeftPressed && !this.mousePreviouslyClicked) 
+		{
+		  this.particles.push(...this.generateParticle(5, 8, this.mousePos));		// creates 3-8 particles on click, pushes into this.particles using spread operator
+			this.timeSinceLastParticle = 0;
+		}	
+		
+		// Cooldown to limit particle spawn when clicking and holding
+		if (this.mouseLeftPressed && this.mousePreviouslyClicked && this.timeSinceLastParticle >= cooldown)
+		{
+		  if (this.mousePos.x !== this.lastMousePos.x || this.mousePos.y !== this.lastMousePos.y) // spawns particle when mouse moves
+		  {
+		    this.particles.push(...this.generateParticle(1, 1, this.mousePos));	// creates 1 -3 particles when holding click, pushes into this.particles using spread operator
+		  }
+		}
+
 	}
 
 	specialEvent()
@@ -191,24 +219,6 @@ export default class Engine
 
 			// push modified particles into this.particles
 			this.particles.push(p);
-		}
-	}
-
-	despawn()
-	{
-		// if particle center coordinate is found outside WINDOW_HEIGHT and WINDOW_WIDTH + buffer, delete particle from this.particles
-		const buffer = 500;
-		const boundsX = WINDOW_WIDTH + buffer;
-		const boundsY = WINDOW_HEIGHT + buffer;
-
-		for (let i = this.particles.length - 1; i >= 0; i--)
-		{
-			const p = this.particles[i];
-
-			if (Math.abs(p.m_centerCoordinate) > boundsX || Math.abs(p.m_centerCoordinate) > boundsY)
-			{
-				this.particles.splice(i, 1);	// removes specific particle by its index
-			}
 		}
 	}
 }
