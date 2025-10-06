@@ -17,81 +17,81 @@ document.addEventListener("touchstart", () =>
   if (music.paused) music.play();
 }, { once: true });
 
-//	+---------------------------+
-//	|	MUSIC INITIALIZATION	|
-//	+---------------------------+
+//    +---------------------------+
+//    |    MUSIC INITIALIZATION    |
+//    +---------------------------+
 
 const tracks =
 {
-	TRACK_1:
-	{
-		title: "My Little Pony Theme Song",
-		artist: "Twilight Sparkle",
-		file: "MLP_Extended.flac"
-	},
-	TRACK_2:
-	{
-		title: "Make A Wish",
-		artist: "Pinkie Pie",
-		file: "Make_A_Wish_Extended.flac"
-	},
-	TRACK_3:
-	{
-		title: "Remember Summer Days",
-		artist: "Anri",
-		file: "Remember_Summer_Days.flac"
-	}
+    TRACK_1:
+    {
+        title: "My Little Pony Theme Song",
+        artist: "Twilight Sparkle",
+        file: "MLP_Extended.flac"
+    },
+    TRACK_2:
+    {
+        title: "Make A Wish",
+        artist: "Pinkie Pie",
+        file: "Make_A_Wish_Extended.flac"
+    },
+    TRACK_3:
+    {
+        title: "Remember Summer Days",
+        artist: "Anri",
+        file: "Remember_Summer_Days.flac"
+    }
 }
 
 const playlist = Object.keys(tracks);
-let musicIndex = 0;	// Index of the tracklist
+let musicIndex = 0;    // Index of the tracklist
 
 let timer = 0;
-const cooldown = 300;	// 300ms -> 0.3 s
-		
-//	+---------------------------+
-//	|		CHANGE MUSIC		|
-//	+---------------------------+
+const cooldown = 300;    // 300ms -> 0.3 s
+        
+//    +---------------------------+
+//    |        CHANGE MUSIC        |
+//    +---------------------------+
 
 export function changeMusic(forward = true)
 {
-	// Check for cooldown timer
-	const now = performance.now();	
-	if (now - timer < cooldown) return;	// this prevents a single click or double click from skipping songs twice
-	timer = now;
+    // Check for cooldown timer
+    const now = performance.now();    
+    if (now - timer < cooldown) return;    // this prevents a single click or double click from skipping songs twice
+    timer = now;
 
-	// Loop forwards or backwards the tracklist
-	musicIndex = (forward) ? (musicIndex + 1) % playlist.length : (musicIndex - 1 + playlist.length) % playlist.length;
+    // Loop forwards or backwards the tracklist
+    musicIndex = (forward) ? (musicIndex + 1) % playlist.length : (musicIndex - 1 + playlist.length) % playlist.length;
 
-	// Change current track
-	const key = playlist[musicIndex]; 
-  	const track = tracks[key];              
-  	music.src = `./assets/music/${track.file}`;
-  	music.play();
+    // Change current track
+    const key = playlist[musicIndex]; 
+      const track = tracks[key];              
+      music.src = `./assets/music/${track.file}`;
+      music.play();
 
-	console.log(`Now playing: ${track.title} - ${track.artist}`);
+    console.log(`Now playing: ${track.title} - ${track.artist}`);
 }
 
-//	+---------------------------+
-//	|		MUTE BUTTON			|
-//	+---------------------------+
+//    +---------------------------+
+//    |        MUTE BUTTON            |
+//    +---------------------------+
 
 let isMuted = false;
 
 export function muteSound()
 {
   const button = document.getElementById("volumeButton");
-	if (isMuted)
-	{
-		music.volume = 0.25;
-		isMuted = false;
-		button.style.backgroundImage = 'url("./assets/images/Volume_On.png")';
-	}
-	else
-	{
-		music.volume = 0.0;
-		isMuted = true;
-		button.style.backgroundImage = 'url("./assets/images/Volume_Mute.png")';
-	}
-	console.log((isMuted) ? "Volume is muted." : "Volume is unmuted.");
+    if (isMuted)
+    {
+        music.volume = 0.25;
+        isMuted = false;
+        button.style.backgroundImage = 'url("./assets/images/Volume_On.png")';
+    }
+    else
+    {
+        music.volume = 0.0;
+        isMuted = true;
+        button.style.backgroundImage = 'url("./assets/images/Volume_Mute.png")';
+    }
+    console.log((isMuted) ? "Volume is muted." : "Volume is unmuted.");
 }

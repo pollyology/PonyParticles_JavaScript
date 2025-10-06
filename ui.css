@@ -8,12 +8,12 @@
 
 #container
 {
-	/* width: 960px; */
-	/* height: 540px; */
-	margin: 0 auto;
-	position: relative;
-	overflow: hidden;
-	background: rgb(154, 218, 248); /* default to Rainbow Dash Blue */
+    /* width: 960px; */
+    /* height: 540px; */
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    background: rgb(154, 218, 248); /* default to Rainbow Dash Blue */
 }
 
 #window 
@@ -37,24 +37,24 @@
 
 #ui
 {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 2;
-	pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
 }
 
 #ui button
 {
-	border: none;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center;
-	position: absolute;
-	cursor: pointer;
-	pointer-events: auto;
+    border: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 #specialButton

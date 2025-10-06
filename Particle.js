@@ -20,20 +20,20 @@ export class Particle
         
         // Create random values
         this.random = Math.random() // generates a floating point number between 0 and 1
-        this.m_radiansPerSec = this.random * M_PI;	// basically affects how much particle spins by randomizing rotation angle
+        this.m_radiansPerSec = this.random * M_PI;    // basically affects how much particle spins by randomizing rotation angle
 
         // Initialize the center coordinate based on mouse click location and canvas size
        this.m_centerCoordinate = 
-	   { 
-    		x: mouseClickPosition.x - canvas.width / 2,
-    		y:mouseClickPosition.y - canvas.height / 2
-	   };
+       { 
+            x: mouseClickPosition.x - canvas.width / 2,
+            y:mouseClickPosition.y - canvas.height / 2
+       };
 
         // Initialize velocity in X & Y directions
         this.m_vx = Math.random() * 400 + 100; // Random velocity between 100 and 500
         this.m_vy = Math.random() * 400 + 100; // Random velocity between 100 and 500
         this.m_vx *= Math.random() < 0.5 ? 1 : -1; // Randomizes m_vx to be positive or negative
-		this.m_vy *= Math.random() < 0.5 ? 1 : -1;
+        this.m_vy *= Math.random() < 0.5 ? 1 : -1;
     
         // Initialize color scheme
         this.m_color1 = 'rgba(252, 193, 26, 1)';    // fill color
@@ -52,15 +52,15 @@ export class Particle
         const ctx = this.ctx;
         const { m_A, numPoints } = this;
 
-		// Draw shape
+        // Draw shape
         ctx.beginPath();
-		ctx.moveTo(m_A.get(0, 0), m_A.get(1, 0));	// start at first vertex
+        ctx.moveTo(m_A.get(0, 0), m_A.get(1, 0));    // start at first vertex
 
-        for (let j = 1; j < numPoints; j++)		// draw lines for each vertex (numPoints)
+        for (let j = 1; j < numPoints; j++)        // draw lines for each vertex (numPoints)
         {
             ctx.lineTo(m_A.get(0, j), m_A.get(1, j));
         }
-        ctx.closePath();	// connect first and last vertex together
+        ctx.closePath();    // connect first and last vertex together
 
         // Set colors
         ctx.fillStyle = this.m_color1;

@@ -1,71 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Particles</title>
-	<link rel = "stylesheet" href = "ui.css">
-	<style>
-		body 
-		{
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-			background: black;
-			width: 960px;
-			height: 540px;
-		}
-		#bg
-		{
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%) scale(0.5) translate(-75px, 0px);
-			z-index: 0;	/* places bg under all other elements */
-			pointer-events: none;	/* bg does not interact with click */
-	
-		}
-		#window
-		{
-			position: relative;
-			z-index: 1;
-			display: block;
-			margin: auto;
-			background: transparent;
-		}
-		#offscreen
-		{
-			position: absolute;
-			background-color: transparent;
-			left: 0px;
-			top: -50px;
-			width: 1920px;
-			height: 5px;
-		}
-		#banner
-		{
-		  position: relative;
-		  width: 100px;
-		  height: 100px;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>Particles</title>
+    <link rel = "stylesheet" href = "ui.css">
+    <style>
+        body 
+        {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+            width: 960px;
+            height: 540px;
+        }
+        #bg
+        {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5) translate(-75px, 0px);
+            z-index: 0;    /* places bg under all other elements */
+            pointer-events: none;    /* bg does not interact with click */
+    
+        }
+        #window
+        {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin: auto;
+            background: transparent;
+        }
+        #offscreen
+        {
+            position: absolute;
+            background-color: transparent;
+            left: 0px;
+            top: -50px;
+            width: 1920px;
+            height: 5px;
+        }
+        #banner
+        {
+          position: relative;
+          width: 100px;
+          height: 100px;
+        }
+    </style>
 </head>
 <body>
-	<div id = "container">
-		<img id = "bg" src = "assets/animation/rainbow-dash.gif">
-		<canvas id="window"></canvas>
-		<div id = "banner">Test Banner</div>
-	
-		<!-- UI Buttons -->
-		<div id = "ui">
-			<button id = "characterButton">change character?</button>
-			<button id = "specialButton">i love computer science!</button>
-			<button id = "musicButton"></button>
-			<button id = "volumeButton"></button>
-		</div>
-	</div>
+    <div id = "container">
+        <img id = "bg" src = "assets/animation/rainbow-dash.gif">
+        <canvas id="window"></canvas>
+        <div id = "banner">Test Banner</div>
+    
+        <!-- UI Buttons -->
+        <div id = "ui">
+            <button id = "characterButton">change character?</button>
+            <button id = "specialButton">i love computer science!</button>
+            <button id = "musicButton"></button>
+            <button id = "volumeButton"></button>
+        </div>
+    </div>
 
-	<audio id = "music" src = "assets/music/MLP_Extended.flac" loop></audio>
-	<div id = "offscreen"></div>
-	<script type="module" src = "./UI.js"></script>
+    <audio id = "music" src = "assets/music/MLP_Extended.flac" loop></audio>
+    <div id = "offscreen"></div>
+    <script type="module" src = "./Input.js"></script>
 </body>
 </html>
