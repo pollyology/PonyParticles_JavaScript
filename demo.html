@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <script>
-    function openCenteredPopup(url, name, width, height) {
+    function openCenteredPopup(url, name, width, height) 
+    {
       const screenWidth = window.screen.width;
       const screenHeight = window.screen.height;
       const left = (screenWidth - width) / 2;
@@ -16,17 +17,15 @@
         `resizable=no,scrollbars=no,toolbar=no,menubar=no,status=no,location=no`
       );
 
-      if (!popup) {
+      if (!popup)
         alert("Popup blocked! Please allow popups for this site.");
-      } else {
+      else 
         popup.focus();
-      }
     }
 
     // Automatically opens the demo in a popup window, like an MLP virus (jk)
-    window.onload = function() {
+    window.onload = function() 
       openCenteredPopup('https://pollyology.neocities.org/particles/', 'Particles', 960, 540);
-    };
   </script>
 </head>
 </html>
